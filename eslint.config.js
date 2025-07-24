@@ -21,7 +21,8 @@ export default [
       parser: tseslint.parser,
     },
     rules: {
-      // 필요시 규칙 추가
+      // any 사용 제한 해제 -> window.daum 사용을 위해 해제
+      "@typescript-eslint/no-explicit-any": "off",
     },
   },
 ];
