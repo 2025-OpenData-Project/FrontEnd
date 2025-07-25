@@ -1,13 +1,12 @@
-import { useNavigate } from "react-router-dom";
+//import { useNavigate } from "react-router-dom";
+import Slide from "../components/Slide";
+import LocationRcmd from "../components/LocationRcmd";
 
 const Home = () => {
-  const navigate = useNavigate();
-
   return (
-    <div>
-      <h1>Welcome to the Home Page</h1>
-      <p>This is the main content of the home page.</p>
-      <button onClick={() => navigate("/login")}>Click Me</button>
+    <div className="flex flex-col items-center justify-center gap-4">
+      <Slide />
+      <LocationRcmd />
     </div>
   );
 };

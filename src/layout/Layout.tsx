@@ -7,7 +7,7 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   return (
-    <div className="w-full h-[100vh]">
+    <div className="w-full h-[100vh] bg-gradient-to-b from-blue-50 to-white">
       <NavBar />
       {children}
     </div>
