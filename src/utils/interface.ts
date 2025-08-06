@@ -16,21 +16,15 @@ export interface AddressBtnProps {
 }
 
 export interface EndInputBoxProps {
-  endHour: number;
-  endMinute: number;
-  setEndHour: (x: number) => void;
-  setEndMinute: (x: number) => void;
-  startHour: number;
-  startMinute: number;
+  endDateTime: string;
+  setEndDateTime: (dateTime: string) => void;
+  startDateTime: string;
 }
 
 export interface StartInputBoxProps {
-  startHour: number;
-  startMinute: number;
-  setStartHour: (x: number) => void;
-  setStartMinute: (x: number) => void;
-  endHour: number;
-  endMinute: number;
+  startDateTime: string;
+  setStartDateTime: (dateTime: string) => void;
+  endDateTime: string;
 }
 
 export interface EndAddressBtnProps {
@@ -42,3 +36,9 @@ export interface DaumPostcodeData {
   jibunAddress: string;
 }
 // interface 에서는 data에서 더 많은 값을 받아와도 필요한 값만 정의해서 사용할 수 있다.
+
+export interface QnA {
+  question: string;
+  answer: string;
+  index: number;
+}
