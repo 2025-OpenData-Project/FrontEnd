@@ -16,15 +16,15 @@ export interface AddressBtnProps {
 }
 
 export interface EndInputBoxProps {
-  endDateTime: string;
-  setEndDateTime: (dateTime: string) => void;
-  startDateTime: string;
+  endTime: string;
+  setEndTime: (dateTime: string) => void;
+  startTime: string;
 }
 
 export interface StartInputBoxProps {
-  startDateTime: string;
-  setStartDateTime: (dateTime: string) => void;
-  endDateTime: string;
+  startTime: string;
+  setStartTime: (dateTime: string) => void;
+  endTime: string;
 }
 
 export interface EndAddressBtnProps {
@@ -41,4 +41,30 @@ export interface QnA {
   question: string;
   answer: string;
   index: number;
+}
+
+export interface TourSpotEvent {
+  tourspotEventId: number;
+  eventName: string;
+  eventPeriod: string;
+  eventPlace: string;
+  eventX: number;
+  eventY: number;
+  tourspotThumbnail: string;
+  tourspotUrl: string;
+}
+
+export interface TourEventCardProps {
+  event: TourSpotEvent;
+}
+
+export interface TourEvent {
+  tourspotEventId: number;
+  eventName: string;
+  eventPeriod: string;
+  eventPlace: string;
+  eventX: number;
+  eventY: number;
+  tourspotThumbnail: string;
+  tourspotUrl: string;
 }

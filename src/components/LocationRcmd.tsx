@@ -6,11 +6,14 @@ import StartInputBox from "./location/StartInputBox.tsx";
 import EndInputBox from "./location/EndInputBox.tsx";
 
 const LocationRcmd = () => {
-  const [startDateTime, setStartDateTime] = useState<string>("");
-  const [endDateTime, setEndDateTime] = useState<string>("");
+  const [startTime, setStartTime] = useState<string>("");
+  const [endTime, setEndTime] = useState<string>("");
   const [startX, setStartX] = useState<number | null>(null);
   const [startY, setStartY] = useState<number | null>(null);
   const [endAddress, setEndAddress] = useState<string>("");
+
+  // 오늘 날짜 구하기
+  const today = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
 
   const handleButtonClick = () => {
     if (
@@ -18,14 +21,20 @@ const LocationRcmd = () => {
       startY !== null &&
       endAddress &&
       endAddress !== "장소를 선택해주세요" &&
-      startDateTime &&
-      endDateTime
+      startTime &&
+      endTime
     ) {
+      // "YYYY-MM-DDTHH:mm:00" 형식으로 변환
+      const startDateTime = `${today}T${startTime}:00`;
+      const endDateTime = `${today}T${endTime}:00`;
+
       console.log("Start DateTime:", startDateTime);
       console.log("End DateTime:", endDateTime);
       console.log("StartX:", startX);
       console.log("StartY:", startY);
       console.log("EndAddress:", endAddress);
+
+      // 서버로 startDateTime, endDateTime을 보내면 됩니다.
     } else {
       alert("모든 필드를 올바르게 입력해주세요.");
     }
@@ -35,20 +44,18 @@ const LocationRcmd = () => {
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4 w-full max-w-6xl px-4 place-items-center bg-gray-100 p-5 rounded-lg">
       <AddressBtn setStartX={setStartX} setStartY={setStartY} />
       <StartInputBox
-        startDateTime={startDateTime}
-        endDateTime={endDateTime}
-        setStartDateTime={setStartDateTime}
+        startTime={startTime}
+        endTime={endTime}
+        setStartTime={setStartTime}
       />
       <EndInputBox
-        endDateTime={endDateTime}
-        startDateTime={startDateTime}
-        setEndDateTime={setEndDateTime}
+        endTime={endTime}
+        startTime={startTime}
+        setEndTime={setEndTime}
       />
       <EndAddressBtn setEndAddress={setEndAddress} />
       <button
-        onClick={() => {
-          handleButtonClick();
-        }}
+        onClick={handleButtonClick}
         className="h-[71px] w-[80%] bg-[#739DFF] text-white rounded-md truncate overflow-hidden whitespace-nowrap text-center px-2"
       >
         탐색하기

@@ -3,6 +3,7 @@ import { Outlet, Navigate } from "react-router-dom";
 import Home from "./pages/Home.jsx";
 import Login from "./pages/Login.jsx";
 import Layout from "./layout/Layout.tsx";
+import Spot from "./pages/Spot.tsx";
 
 const routes = createBrowserRouter([
   {
@@ -24,6 +25,10 @@ const routes = createBrowserRouter([
       {
         path: "home",
         element: <Home />,
+      },
+      {
+        path: "spot",
+        element: <Spot />,
       },
     ],
   },
