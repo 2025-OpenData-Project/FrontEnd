@@ -1,28 +1,39 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import SpotCongestion from "../components/detailSpot/SpotCongestion";
 import TourEventList from "../components/detailSpot/TourEventList";
 import SpotTitle from "../components/detailSpot/SpotTitle";
-import SpotMap from "../components/detailSpot/SpotMap";
+import SpotKakaoMap from "../components/detailSpot/SpotKakaoMap";
 import SpotAddressCopy from "../components/detailSpot/SpotAddressCopy";
 
-//목업 데이터
-import { mockTourSpotResponse } from "../data/data";
+import { getTourSpotDetail } from "../api/spotDetailApi";
 
 const Spot = () => {
+  const [data, setData] = useState<any>(null);
+
   useEffect(() => {
-    // TODO: API 통신 로직 추가 예정
+    const fetchData = async () => {
+      const response = await getTourSpotDetail({
+        tourspotId: 6536,
+      });
+      setData(response.result);
+      console.log(response);
+    };
+    fetchData();
   }, []);
 
-  const { congestionLabel, tourSpotEvents, tourspotNm, address } =
-    mockTourSpotResponse.result;
+  if (!data) {
+    return <div className="w-full text-center py-10">로딩 중...</div>;
+  }
+
+  const { congestionLabel, tourSpotEvents, tourspotNm, address } = data;
 
   return (
     <div className="w-full mx-auto px-4 flex flex-col items-center">
       <SpotTitle title={tourspotNm} />
       {/* 혼잡도 */}
       <SpotCongestion congestion={congestionLabel} />
-      <SpotMap />
-      <SpotAddressCopy address={address.addressKorNm} />
+      <SpotKakaoMap xPos={address.longitude} yPos={address.latitude} />
+      <SpotAddressCopy address={address.addressDetail} />
       <SpotTitle title={"관광지 소개"} />
       <div className="w-full max-w-[1000px] mx-auto py-4 text-justify text-xl">
         경복궁은 1395년 태조 이성계에 의해 조선왕조의 법궁으로 창건되었습니다.

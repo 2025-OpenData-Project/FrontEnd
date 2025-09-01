@@ -68,3 +68,11 @@ export interface TourEvent {
   tourspotThumbnail: string;
   tourspotUrl: string;
 }
+
+export interface HomeTourFindApiProps {
+  lat: number;
+  lon: number;
+  startTime: string;
+  endTime: string;
+  tourspot: string;
+}

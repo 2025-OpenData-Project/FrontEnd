@@ -5,6 +5,8 @@ import EndAddressBtn from "./location/EndAddressBtn.tsx";
 import StartInputBox from "./location/StartInputBox.tsx";
 import EndInputBox from "./location/EndInputBox.tsx";
 
+import { getCourse } from "../api/homeApi.ts";
+
 const LocationRcmd = () => {
   const [startTime, setStartTime] = useState<string>("");
   const [endTime, setEndTime] = useState<string>("");
@@ -15,7 +17,7 @@ const LocationRcmd = () => {
   // 오늘 날짜 구하기
   const today = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
 
-  const handleButtonClick = () => {
+  const handleButtonClick = async () => {
     if (
       startX !== null &&
       startY !== null &&
@@ -25,14 +27,21 @@ const LocationRcmd = () => {
       endTime
     ) {
       // "YYYY-MM-DDTHH:mm:00" 형식으로 변환
-      const startDateTime = `${today}T${startTime}:00`;
-      const endDateTime = `${today}T${endTime}:00`;
-
+      const startDateTime = `${today} ${startTime}:00`;
+      const endDateTime = `${today} ${endTime}:00`;
       console.log("Start DateTime:", startDateTime);
       console.log("End DateTime:", endDateTime);
       console.log("StartX:", startX);
       console.log("StartY:", startY);
       console.log("EndAddress:", endAddress);
+      const res = await getCourse({
+        lat: startY,
+        lon: startX,
+        startTime: startDateTime,
+        endTime: endDateTime,
+        tourspot: endAddress,
+      });
+      console.log("API Response:", res);
 
       // 서버로 startDateTime, endDateTime을 보내면 됩니다.
     } else {
