@@ -4,6 +4,7 @@ import TourEventList from "../components/detailSpot/TourEventList";
 import SpotTitle from "../components/detailSpot/SpotTitle";
 import SpotKakaoMap from "../components/detailSpot/SpotKakaoMap";
 import SpotAddressCopy from "../components/detailSpot/SpotAddressCopy";
+import SpotTag from "../components/detailSpot/SpotTag";
 
 import { getTourSpotDetail } from "../api/spotDetailApi";
 
@@ -25,13 +26,16 @@ const Spot = () => {
     return <div className="w-full text-center py-10">로딩 중...</div>;
   }
 
-  const { congestionLabel, tourSpotEvents, tourspotNm, address } = data;
+  const { congestionLabel, tourSpotEvents, tourspotNm, address, tourSpotTags } =
+    data;
 
   return (
     <div className="w-full mx-auto px-4 flex flex-col items-center">
       <SpotTitle title={tourspotNm} />
       {/* 혼잡도 */}
       <SpotCongestion congestion={congestionLabel} />
+      <SpotTag spotTags={tourSpotTags} />
+
       <SpotKakaoMap xPos={address.longitude} yPos={address.latitude} />
       <SpotAddressCopy address={address.addressDetail} />
       <SpotTitle title={"관광지 소개"} />
