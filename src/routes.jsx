@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router";
 import { Outlet, Navigate } from "react-router-dom";
 import Home from "./pages/Home.jsx";
 import Login from "./pages/Login.jsx";
+import CourseDetail from "./pages/CourseDetail.tsx";
 import Layout from "./layout/Layout.tsx";
 
 const routes = createBrowserRouter([
@@ -24,6 +25,10 @@ const routes = createBrowserRouter([
       {
         path: "home",
         element: <Home />,
+      },
+      {
+        path: "course/:courseId",
+        element: <CourseDetail />,
       },
     ],
   },
