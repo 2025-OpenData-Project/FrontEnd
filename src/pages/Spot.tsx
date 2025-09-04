@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import SpotCongestion from "../components/detailSpot/SpotCongestion";
 import TourEventList from "../components/detailSpot/TourEventList";
 import SpotTitle from "../components/detailSpot/SpotTitle";
@@ -10,17 +11,20 @@ import { getTourSpotDetail } from "../api/spotDetailApi";
 
 const Spot = () => {
   const [data, setData] = useState<any>(null);
+  const { id } = useParams();
 
   useEffect(() => {
     const fetchData = async () => {
+      if (!id) return;
+      const tourspotId = Number(id);
       const response = await getTourSpotDetail({
-        tourspotId: 6536,
+        tourspotId,
       });
+      console.log(response.result);
       setData(response.result);
-      console.log(response);
     };
     fetchData();
-  }, []);
+  }, [id]);
 
   if (!data) {
     return <div className="w-full text-center py-10">로딩 중...</div>;
@@ -29,11 +33,16 @@ const Spot = () => {
   const { congestionLabel, tourSpotEvents, tourspotNm, address, tourSpotTags } =
     data;
 
+  const safeCongestionLabel = congestionLabel ?? "정보 없음";
+  const safeTourSpotEvents = Array.isArray(tourSpotEvents)
+    ? tourSpotEvents
+    : [];
+
   return (
     <div className="w-full mx-auto px-4 flex flex-col items-center">
       <SpotTitle title={tourspotNm} />
       {/* 혼잡도 */}
-      <SpotCongestion congestion={congestionLabel} />
+      <SpotCongestion congestion={safeCongestionLabel} />
       <SpotTag spotTags={tourSpotTags} />
 
       <SpotKakaoMap xPos={address.longitude} yPos={address.latitude} />
@@ -52,7 +61,7 @@ const Spot = () => {
         단풍이 장관을 이룹니다.
       </div>
       {/* 이벤트 목록 */}
-      <TourEventList events={tourSpotEvents} />
+      <TourEventList events={safeTourSpotEvents} />
     </div>
   );
 };

@@ -2,9 +2,13 @@ interface TourCardProps {
   id: string;
   name: string;
   congestion: string;
+  imageUrl: string;
 }
 
-const TourCard = ({ id, name, congestion }: TourCardProps) => {
+import { useNavigate } from "react-router-dom";
+
+const TourCard = ({ id, name, congestion, imageUrl }: TourCardProps) => {
+  const navigate = useNavigate();
   const getCongestionColor = (congestion: string) => {
     switch (congestion) {
       case "붐빔":
@@ -21,7 +25,7 @@ const TourCard = ({ id, name, congestion }: TourCardProps) => {
   };
 
   const handleCardClick = () => {
-    console.log(`카드 클릭됨 - ID: ${id}, Name: ${name}`);
+    navigate(`/spot/${id}`);
   };
 
   return (
@@ -45,7 +49,12 @@ const TourCard = ({ id, name, congestion }: TourCardProps) => {
         {/* 이미지 플레이스홀더 */}
         <div className="w-full h-full flex items-center justify-center">
           <div className="w-8 h-8 border-2 border-gray-400 rounded flex items-center justify-center">
-            <span className="text-gray-400 text-xs">+</span>
+            {/* <span className="text-gray-400 text-xs">+</span> */}
+            <img
+              src={imageUrl}
+              alt={name}
+              className="w-full h-full object-cover"
+            />
           </div>
         </div>
       </div>

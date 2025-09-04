@@ -20,3 +20,8 @@ export const getCourse = async ({
   });
   return response.data;
 };
+
+export const getTenTourSpot = async () => {
+  const response = await baseAxiosInstance.get(`/api/tourspot/rank`);
+  return response.data?.result ?? [];
+};
