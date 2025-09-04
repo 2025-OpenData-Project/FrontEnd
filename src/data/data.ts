@@ -114,3 +114,170 @@ export const locations = [
   "청와대",
   "명동",
 ];
+
+export const touristSpotsResponse = {
+  code: "200",
+  message: "성공",
+  result: {
+    tourspotNm: "북촌한옥마을",
+    address: {
+      addressKorNm: "서울특별시 종로구 계동길 37",
+      addressDetail: "북촌한옥마을 일대",
+      latitude: "37.5796",
+      longitude: "126.9825",
+    },
+    congestionLabel: "보통",
+    tourSpotEvents: [
+      {
+        tourspotEventId: 1,
+        eventName: "한옥 체험 프로그램",
+        eventPeriod: "2025-08-01 ~ 2025-08-31",
+        eventPlace: "북촌문화센터",
+        eventX: 37.5796,
+        eventY: 126.9825,
+        tourspotThumbnail: "https://placehold.co/300x200",
+        tourspotUrl: "https://bukchon.seoul.go.kr",
+      },
+      {
+        tourspotEventId: 2,
+        eventName: "전통 차 체험",
+        eventPeriod: "2025-08-15 ~ 2025-09-15",
+        eventPlace: "한옥 찻집",
+        eventX: 37.5798,
+        eventY: 126.9827,
+        tourspotThumbnail: "https://placehold.co/300x200",
+        tourspotUrl: "https://bukchon.seoul.go.kr/tea",
+      },
+    ],
+    tourSpotTags: [
+      {
+        tourSpotCategory: "문화유산",
+      },
+      {
+        tourSpotCategory: "전통건축",
+      },
+      {
+        tourSpotCategory: "체험",
+      },
+      {
+        tourSpotCategory: "사진촬영",
+      },
+    ],
+  },
+  isSuccess: true,
+};
+
+export const faqData = [
+  {
+    question: "코스 추천은 어떻게 이루어지나요?",
+    answer:
+      "사용자의 위치, 선호도, 혼잡도 정보를 종합하여 최적의 여행 코스를 추천해드립니다.",
+  },
+  {
+    question: "혼잡도 정보는 얼마나 정확한가요?",
+    answer:
+      "한국관광공사의 실시간 데이터와 예측 모델을 활용하여 높은 정확도의 혼잡도 정보를 제공합니다.",
+  },
+  {
+    question: "코스 변경이 가능한가요?",
+    answer:
+      "네, 여행 중에도 실시간으로 코스를 변경하고 대체 관광지를 추천받을 수 있습니다.",
+  },
+  {
+    question: "무료로 이용할 수 있나요?",
+    answer:
+      "기본 기능은 무료로 이용 가능하며, 프리미엄 기능은 유료 플랜을 통해 이용하실 수 있습니다.",
+  },
+  {
+    question: "어떤 지역을 지원하나요?",
+    answer:
+      "현재 서울, 부산, 제주도 등 주요 관광지를 지원하며, 지속적으로 확대하고 있습니다.",
+  },
+  {
+    question: "모바일에서도 이용할 수 있나요?",
+    answer: "네, 웹과 모바일 모두에서 최적화된 서비스를 제공합니다.",
+  },
+  {
+    question: "여행 기록을 저장할 수 있나요?",
+    answer: "마이페이지에서 과거 여행 기록을 확인하고 관리할 수 있습니다.",
+  },
+  {
+    question: "언어 설정을 변경할 수 있나요?",
+    answer:
+      "한국어, 영어, 일본어, 중국어를 지원하며 마이페이지에서 변경 가능합니다.",
+  },
+];
+
+export const mockTourSpotResponse = {
+  code: "200",
+  message: "성공",
+  result: {
+    tourspotNm: "북촌한옥마을",
+    address: {
+      addressKorNm: "서울특별시 종로구 계동길 37",
+      addressDetail: "북촌한옥마을 일대",
+      latitude: "37.5796",
+      longitude: "126.9825",
+    },
+    congestionLabel: "보통",
+    tourSpotEvents: [
+      {
+        tourspotEventId: 1,
+        eventName: "한옥 체험 프로그램",
+        eventPeriod: "2025-08-01 ~ 2025-08-31",
+        eventPlace: "북촌문화센터",
+        eventX: 37.5796,
+        eventY: 126.9825,
+        tourspotThumbnail: "https://placehold.co/300x200?text=한옥체험",
+        tourspotUrl: "https://bukchon.seoul.go.kr",
+      },
+      {
+        tourspotEventId: 2,
+        eventName: "전통 차 체험",
+        eventPeriod: "2025-08-15 ~ 2025-09-15",
+        eventPlace: "한옥 찻집",
+        eventX: 37.5798,
+        eventY: 126.9827,
+        tourspotThumbnail: "https://placehold.co/300x200?text=전통차체험",
+        tourspotUrl: "https://bukchon.seoul.go.kr/tea",
+      },
+      {
+        tourspotEventId: 3,
+        eventName: "사진 콘테스트",
+        eventPeriod: "2025-08-10 ~ 2025-08-20",
+        eventPlace: "북촌 일대",
+        eventX: 37.58,
+        eventY: 126.983,
+        tourspotThumbnail: "https://placehold.co/300x200?text=사진콘테스트",
+        tourspotUrl: "https://bukchon.seoul.go.kr/photo",
+      },
+      {
+        tourspotEventId: 4,
+        eventName: "전통공예 체험",
+        eventPeriod: "2025-08-05 ~ 2025-08-25",
+        eventPlace: "공예 체험관",
+        eventX: 37.5799,
+        eventY: 126.9829,
+        tourspotThumbnail: "https://placehold.co/300x200?text=공예체험",
+        tourspotUrl: "https://bukchon.seoul.go.kr/craft",
+      },
+      {
+        tourspotEventId: 5,
+        eventName: "문화 해설 투어",
+        eventPeriod: "2025-08-01 ~ 2025-08-31",
+        eventPlace: "북촌 안내소",
+        eventX: 37.5797,
+        eventY: 126.9826,
+        tourspotThumbnail: "https://placehold.co/300x200?text=문화해설",
+        tourspotUrl: "https://bukchon.seoul.go.kr/tour",
+      },
+    ],
+    tourSpotTags: [
+      { tourSpotCategory: "문화유산" },
+      { tourSpotCategory: "전통건축" },
+      { tourSpotCategory: "체험" },
+      { tourSpotCategory: "사진촬영" },
+    ],
+  },
+  isSuccess: true,
+};

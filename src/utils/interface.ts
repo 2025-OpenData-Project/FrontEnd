@@ -16,21 +16,15 @@ export interface AddressBtnProps {
 }
 
 export interface EndInputBoxProps {
-  endHour: number;
-  endMinute: number;
-  setEndHour: (x: number) => void;
-  setEndMinute: (x: number) => void;
-  startHour: number;
-  startMinute: number;
+  endTime: string;
+  setEndTime: (dateTime: string) => void;
+  startTime: string;
 }
 
 export interface StartInputBoxProps {
-  startHour: number;
-  startMinute: number;
-  setStartHour: (x: number) => void;
-  setStartMinute: (x: number) => void;
-  endHour: number;
-  endMinute: number;
+  startTime: string;
+  setStartTime: (dateTime: string) => void;
+  endTime: string;
 }
 
 export interface EndAddressBtnProps {
@@ -42,3 +36,43 @@ export interface DaumPostcodeData {
   jibunAddress: string;
 }
 // interface 에서는 data에서 더 많은 값을 받아와도 필요한 값만 정의해서 사용할 수 있다.
+
+export interface QnA {
+  question: string;
+  answer: string;
+  index: number;
+}
+
+export interface TourSpotEvent {
+  tourspotEventId: number;
+  eventName: string;
+  eventPeriod: string;
+  eventPlace: string;
+  eventX: number;
+  eventY: number;
+  tourspotThumbnail: string;
+  tourspotUrl: string;
+}
+
+export interface TourEventCardProps {
+  event: TourSpotEvent;
+}
+
+export interface TourEvent {
+  tourspotEventId: number;
+  eventName: string;
+  eventPeriod: string;
+  eventPlace: string;
+  eventX: number;
+  eventY: number;
+  tourspotThumbnail: string;
+  tourspotUrl: string;
+}
+
+export interface HomeTourFindApiProps {
+  lat: number;
+  lon: number;
+  startTime: string;
+  endTime: string;
+  tourspot: string;
+}

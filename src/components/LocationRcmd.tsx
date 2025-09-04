@@ -5,46 +5,45 @@ import EndAddressBtn from "./location/EndAddressBtn.tsx";
 import StartInputBox from "./location/StartInputBox.tsx";
 import EndInputBox from "./location/EndInputBox.tsx";
 
+import { getCourse } from "../api/homeApi.ts";
+
 const LocationRcmd = () => {
-  const [startHour, setStartHour] = useState<number>(0);
-  const [startMinute, setStartMinute] = useState<number>(0);
-  const [endHour, setEndHour] = useState<number>(23);
-  const [endMinute, setEndMinute] = useState<number>(59);
+  const [startTime, setStartTime] = useState<string>("");
+  const [endTime, setEndTime] = useState<string>("");
   const [startX, setStartX] = useState<number | null>(null);
   const [startY, setStartY] = useState<number | null>(null);
   const [endAddress, setEndAddress] = useState<string>("");
 
-  const DateMaker = (hour: number, minute: number) => {
-    const today = new Date();
-    const year = today.getFullYear(); // 년도
-    const month = String(today.getMonth() + 1).padStart(2, "0"); // 월을 두 자릿수로
-    const date = String(today.getDate()).padStart(2, "0"); // 날짜를 두 자릿수로
-    const CHour = String(hour).padStart(2, "0");
-    const CMinute = String(minute).padStart(2, "0");
+  // 오늘 날짜 구하기
+  const today = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
 
-    return `${year}-${month}-${date} ${CHour}:${CMinute}`;
-  };
-
-  const handleButtonClick = () => {
-    // 값 검사: startX, startY, endAddress가 null 또는 빈 문자열이 아닌지 확인
-    // 로그인 로직이 추가되면 추가적으로 검사를 해서 로그인이 되지 않으면 탐색이 되면 안된다.
+  const handleButtonClick = async () => {
     if (
       startX !== null &&
       startY !== null &&
       endAddress &&
       endAddress !== "장소를 선택해주세요" &&
-      startHour !== null &&
-      startMinute !== null &&
-      endHour !== null &&
-      endMinute !== null
+      startTime &&
+      endTime
     ) {
-      const start = DateMaker(startHour, startMinute);
-      const end = DateMaker(endHour, endMinute);
-      console.log("Start:", start);
-      console.log("End:", end);
+      // "YYYY-MM-DDTHH:mm:00" 형식으로 변환
+      const startDateTime = `${today} ${startTime}:00`;
+      const endDateTime = `${today} ${endTime}:00`;
+      console.log("Start DateTime:", startDateTime);
+      console.log("End DateTime:", endDateTime);
       console.log("StartX:", startX);
       console.log("StartY:", startY);
       console.log("EndAddress:", endAddress);
+      const res = await getCourse({
+        lat: startY,
+        lon: startX,
+        startTime: startDateTime,
+        endTime: endDateTime,
+        tourspot: endAddress,
+      });
+      console.log("API Response:", res);
+
+      // 서버로 startDateTime, endDateTime을 보내면 됩니다.
     } else {
       alert("모든 필드를 올바르게 입력해주세요.");
     }
@@ -54,26 +53,18 @@ const LocationRcmd = () => {
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4 w-full max-w-6xl px-4 place-items-center bg-gray-100 p-5 rounded-lg">
       <AddressBtn setStartX={setStartX} setStartY={setStartY} />
       <StartInputBox
-        startHour={startHour}
-        startMinute={startMinute}
-        endHour={endHour}
-        endMinute={endMinute}
-        setStartHour={setStartHour}
-        setStartMinute={setStartMinute}
+        startTime={startTime}
+        endTime={endTime}
+        setStartTime={setStartTime}
       />
       <EndInputBox
-        endHour={endHour}
-        endMinute={endMinute}
-        startHour={startHour}
-        startMinute={startMinute}
-        setEndHour={setEndHour}
-        setEndMinute={setEndMinute}
+        endTime={endTime}
+        startTime={startTime}
+        setEndTime={setEndTime}
       />
       <EndAddressBtn setEndAddress={setEndAddress} />
       <button
-        onClick={() => {
-          handleButtonClick();
-        }}
+        onClick={handleButtonClick}
         className="h-[71px] w-[80%] bg-[#739DFF] text-white rounded-md truncate overflow-hidden whitespace-nowrap text-center px-2"
       >
         탐색하기
