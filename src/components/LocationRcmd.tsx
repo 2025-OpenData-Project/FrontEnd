@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import AddressBtn from "./location/AddressBtn";
 import EndAddressBtn from "./location/EndAddressBtn.tsx";
@@ -13,6 +14,8 @@ const LocationRcmd = () => {
   const [startX, setStartX] = useState<number | null>(null);
   const [startY, setStartY] = useState<number | null>(null);
   const [endAddress, setEndAddress] = useState<string>("");
+
+  const navigate = useNavigate();
 
   // 오늘 날짜 구하기
   const today = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
@@ -34,14 +37,22 @@ const LocationRcmd = () => {
       console.log("StartX:", startX);
       console.log("StartY:", startY);
       console.log("EndAddress:", endAddress);
-      const res = await getCourse({
-        lat: startY,
-        lon: startX,
-        startTime: startDateTime,
-        endTime: endDateTime,
-        tourspot: endAddress,
-      });
-      console.log("API Response:", res);
+      try {
+        const res = await getCourse({
+          lat: startY,
+          lon: startX,
+          startTime: startDateTime,
+          endTime: endDateTime,
+          tourspot: endAddress,
+        });
+        console.log("API Response:", res);
+        navigate("/courseDetail", {
+          state: { courseData: res.result },
+        });
+      } catch (error) {
+        console.error(error);
+        alert("코스 추천에 실패했습니다. 다시 시도해주세요.");
+      }
 
       // 서버로 startDateTime, endDateTime을 보내면 됩니다.
     } else {
