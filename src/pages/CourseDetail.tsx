@@ -63,6 +63,47 @@ const CourseDetail = () => {
   const [showSideDrawer, setShowSideDrawer] = useState(false);
   const [selectedPlaceForAlternatives, setSelectedPlaceForAlternatives] =
     useState<Place | null>(null);
+  const [likedCourses, setLikedCourses] = useState<Set<string>>(new Set());
+
+  // 좋아요 토글 함수
+  const toggleCourseLike = async (courseId: string) => {
+    try {
+      const baseURL = import.meta.env.VITE_API_BASE_URL;
+
+      if (likedCourses.has(courseId)) {
+        // 이미 좋아요된 상태면 좋아요 취소 (DELETE API가 있다면)
+        // 현재는 POST만 제공되므로 클라이언트에서만 토글
+        setLikedCourses((prev) => {
+          const newSet = new Set(prev);
+          newSet.delete(courseId);
+          return newSet;
+        });
+        console.log(`좋아요 취소: ${courseId}`);
+      } else {
+        // 좋아요 등록
+        const response = await fetch(`${baseURL}/course/like/${courseId}`, {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (response.ok) {
+          setLikedCourses((prev) => new Set(prev).add(courseId));
+          console.log(`좋아요 등록 성공: ${courseId}`);
+        } else {
+          console.error("좋아요 등록 실패:", response.status);
+          if (response.status === 401) {
+            alert("로그인이 필요합니다.");
+          }
+        }
+      }
+    } catch (error) {
+      console.error("좋아요 처리 중 오류:", error);
+      alert("좋아요 처리 중 오류가 발생했습니다.");
+    }
+  };
 
   // 현재 시간을 기준으로 방문해야 할 관광지를 찾는 함수
   const getCurrentPlaceIndex = (places: Place[]) => {
@@ -580,7 +621,7 @@ const CourseDetail = () => {
                       : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
                   }`}
                 >
-                  <div className="flex flex-col space-y-1">
+                  <div className="flex flex-col gap-2">
                     <div className="flex items-center justify-between">
                       <p className="text-sm font-medium text-gray-900">
                         {course.name}
@@ -589,9 +630,30 @@ const CourseDetail = () => {
                         {course.duration}
                       </div>
                     </div>
-                    <p className="text-xs text-gray-600 text-left">
-                      {course.description}
-                    </p>
+                    <div className="flex justify-between items-center">
+                      <p className="text-xs text-gray-600 text-left">
+                        {course.description}
+                      </p>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleCourseLike(course.id);
+                        }}
+                        className={`flex items-center justify-center text-base w-8 h-8 rounded-full transition-colors ${likedCourses.has(
+                          course.id,
+                        )}`}
+                      >
+                        <span
+                          className={
+                            likedCourses.has(course.id)
+                              ? "text-red-500"
+                              : "text-gray-400"
+                          }
+                        >
+                          {likedCourses.has(course.id) ? "♥" : "♡"}
+                        </span>
+                      </button>
+                    </div>
                   </div>
                 </button>
               ))}
