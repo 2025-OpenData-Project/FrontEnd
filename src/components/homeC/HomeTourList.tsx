@@ -15,6 +15,7 @@ const HomeTourList = () => {
     const fetchTourSpots = async () => {
       try {
         const data = await getTenTourSpot();
+        console.log(data);
         setTouristSpots(data);
       } catch {
         alert("관광지 정보를 불러오는데 실패했습니다.");
