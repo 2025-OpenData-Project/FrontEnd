@@ -31,7 +31,10 @@ function AddressBtn({ setStartX, setStartY }: AddressBtnProps) {
         )
           .then((response) => response.json())
           .then((response) => {
-            if (response.documents.length > 0) {
+            if (
+              Array.isArray(response.documents) &&
+              response.documents.length > 0
+            ) {
               const result = response.documents[0];
               setStartX(result.x); // 위도
               setStartY(result.y); // 경도
