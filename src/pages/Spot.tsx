@@ -6,10 +6,12 @@ import SpotTitle from "../components/detailSpot/SpotTitle";
 import SpotKakaoMap from "../components/detailSpot/SpotKakaoMap";
 import SpotAddressCopy from "../components/detailSpot/SpotAddressCopy";
 import SpotTag from "../components/detailSpot/SpotTag";
+import SpotHeart from "../components/detailSpot/SpotHeart";
 
 import { getTourSpotDetail } from "../api/spotDetailApi";
 
 const Spot = () => {
+  const [heart, setHeart] = useState<boolean>(false);
   const [data, setData] = useState<any>(null);
   const { id } = useParams();
 
@@ -37,16 +39,25 @@ const Spot = () => {
   const safeTourSpotEvents = Array.isArray(tourSpotEvents)
     ? tourSpotEvents
     : [];
+  const safeAddress = address ?? {
+    longitude: 0,
+    latitude: 0,
+    addressDetail: "주소 정보 없음",
+  };
 
   return (
     <div className="w-full mx-auto px-4 flex flex-col items-center">
-      <SpotTitle title={tourspotNm} />
+      <section className="flex items-center justify-start gap-2 w-full max-w-[1000px]">
+        <SpotTitle title={tourspotNm} />
+        <SpotHeart heart={heart} setHeart={setHeart} />
+      </section>
+
       {/* 혼잡도 */}
       <SpotCongestion congestion={safeCongestionLabel} />
       <SpotTag spotTags={tourSpotTags} />
 
-      <SpotKakaoMap xPos={address.longitude} yPos={address.latitude} />
-      <SpotAddressCopy address={address.addressDetail} />
+      <SpotKakaoMap xPos={safeAddress.longitude} yPos={safeAddress.latitude} />
+      <SpotAddressCopy address={safeAddress.addressDetail} />
       <SpotTitle title={"관광지 소개"} />
       <div className="w-full max-w-[1000px] mx-auto py-4 text-justify text-xl">
         경복궁은 1395년 태조 이성계에 의해 조선왕조의 법궁으로 창건되었습니다.

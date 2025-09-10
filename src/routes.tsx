@@ -1,10 +1,11 @@
 import { createBrowserRouter } from "react-router";
 import { Outlet, Navigate } from "react-router-dom";
-import Home from "./pages/Home.jsx";
-import Login from "./pages/Login.jsx";
+import Home from "./pages/Home.js";
+import Login from "./pages/Login.js";
 import Layout from "./layout/Layout.tsx";
 import Spot from "./pages/Spot.tsx";
 import MyPage from "./pages/MyPage.tsx";
+import TourSpots from "./pages/TourSpots.tsx";
 
 const routes = createBrowserRouter([
   {
@@ -34,6 +35,10 @@ const routes = createBrowserRouter([
       {
         path: "my-page",
         element: <MyPage />,
+      },
+      {
+        path: "tourspots",
+        element: <TourSpots />,
       },
     ],
   },
