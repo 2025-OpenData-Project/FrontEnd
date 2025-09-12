@@ -18,6 +18,11 @@ const TourSpots = () => {
   const [totalPages, setTotalPages] = useState(0);
   const navigate = useNavigate();
 
+  // ★ 컴포넌트가 마운트될 때 1페이지로 초기화
+  useEffect(() => {
+    setCurrentPage(1);
+  }, []);
+
   const PAGE_SIZE = 5;
 
   useEffect(() => {
