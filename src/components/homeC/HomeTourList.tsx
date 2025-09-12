@@ -32,6 +32,7 @@ const HomeTourList = () => {
       setIsLoading(true);
       try {
         const serverData = await getTenTourSpot();
+        console.log("서버 데이터:", serverData);
 
         // 캐시가 없으면 무조건 저장
         if (!cachedData) {
