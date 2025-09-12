@@ -1,8 +1,14 @@
 import { RouterProvider } from "react-router";
+import { CookiesProvider } from "react-cookie";
+
 import routes from "./routes.tsx";
 
 function App() {
-  return <RouterProvider router={routes}></RouterProvider>;
+  return (
+    <CookiesProvider>
+      <RouterProvider router={routes}></RouterProvider>
+    </CookiesProvider>
+  );
 }
 
 export default App;
