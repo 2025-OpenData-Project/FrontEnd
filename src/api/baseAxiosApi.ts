@@ -21,6 +21,17 @@ const baseAxiosInstance = axios.create({
 // 요청 인터셉터
 baseAxiosInstance.interceptors.request.use(async (config) => {
   await new Promise((resolve) => setTimeout(resolve, 1000)); // 로딩 상태 테스트를 위해 1000ms 지연
+
+  // JWT 토큰을 Authorization 헤더로 추가
+  const accessToken = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("access="))
+    ?.split("=")[1];
+
+  if (accessToken) {
+    config.headers.Authorization = `Bearer ${accessToken}`;
+  }
+
   return config;
 });
 
@@ -39,9 +50,20 @@ baseAxiosInstance.interceptors.response.use(
 
       // 토큰 갱신 로직 실행
       try {
+        // refresh 토큰을 Authorization 헤더로 전송
+        const refreshToken = document.cookie
+          .split("; ")
+          .find((row) => row.startsWith("refresh="))
+          ?.split("=")[1];
+
         await axios.post("/api/auth/refresh", null, {
           baseURL,
           withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            ...(refreshToken && { Authorization: `Bearer ${refreshToken}` }),
+          },
         });
 
         return baseAxiosInstance(originalRequest);
