@@ -11,7 +11,7 @@ function getCookie(name: string) {
 }
 
 const NavBar = () => {
-  const accessToken = getCookie("accesstoken");
+  const accessToken = getCookie("access");
 
   return (
     <nav className="flex justify-between items-center bg-white shadow-sm border-b border-gray-200 p-4">
