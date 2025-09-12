@@ -24,7 +24,6 @@ const HomeTourList = () => {
       // 1. 캐시에서 먼저 데이터 확인
       const cachedData = cacheManager.get<TouristSpot[]>(cacheKey);
       if (cachedData) {
-        console.log("캐시에서 데이터 로드:", cachedData);
         setTouristSpots(cachedData);
         setLastUpdateTime(new Date());
       }
@@ -33,21 +32,22 @@ const HomeTourList = () => {
       setIsLoading(true);
       try {
         const serverData = await getTenTourSpot();
-        console.log("서버에서 데이터 로드:", serverData);
 
-        // 3. 서버 데이터가 캐시와 다른 경우에만 업데이트
-        if (cacheManager.isDataChanged(cacheKey, serverData)) {
-          console.log("데이터 변경 감지, 업데이트 중...");
+        // 캐시가 없으면 무조건 저장
+        if (!cachedData) {
           setTouristSpots(serverData);
           setLastUpdateTime(new Date());
-          // 캐시 업데이트 (5분 TTL)
           cacheManager.set(cacheKey, serverData, 5 * 60 * 1000);
-        } else {
-          console.log("데이터 변경 없음, 캐시 유지");
         }
+        // 캐시가 있고, 데이터가 다르면 업데이트
+        else if (cacheManager.isDataChanged(cacheKey, serverData)) {
+          setTouristSpots(serverData);
+          setLastUpdateTime(new Date());
+          cacheManager.set(cacheKey, serverData, 5 * 60 * 1000);
+        }
+        // 캐시가 있고, 데이터가 같으면 아무것도 안 함
       } catch (error) {
         console.error("서버 데이터 로드 실패:", error);
-        // 서버 요청 실패 시 캐시 데이터가 있으면 그대로 유지
         if (!cachedData) {
           alert("관광지 정보를 불러오는데 실패했습니다.");
         }
