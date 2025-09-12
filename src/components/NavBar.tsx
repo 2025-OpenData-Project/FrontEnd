@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import LogInBtn from "./LogInBtn";
 import MainPageLogo from "./MainPageLogo";
 import HomeUserCard from "./homeC/HomeUserCard";
@@ -11,7 +12,13 @@ function getCookie(name: string) {
 }
 
 const NavBar = () => {
-  const accessToken = getCookie("access");
+  const [accessToken, setAccessToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const token = getCookie("access");
+    setAccessToken(token ?? null);
+    console.log("NavBar 렌더링 - accessToken:", token);
+  }, []);
 
   return (
     <nav className="flex justify-between items-center bg-white shadow-sm border-b border-gray-200 p-4">
