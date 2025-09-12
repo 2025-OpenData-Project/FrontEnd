@@ -11,6 +11,12 @@ type TouristSpot = {
   imageUrl: string;
 };
 
+// 캐시에 저장할 데이터 타입
+type CachedTourData = {
+  content: TouristSpot[];
+  totalPages: number;
+};
+
 const TourSpots = () => {
   const [touristSpots, setTouristSpots] = useState<TouristSpot[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -18,12 +24,13 @@ const TourSpots = () => {
   const [totalPages, setTotalPages] = useState(0);
   const navigate = useNavigate();
 
-  // ★ 컴포넌트가 마운트될 때 1페이지로 초기화
+  const PAGE_SIZE = 5;
+
+  // ★ 컴포넌트가 마운트될 때 초기화
   useEffect(() => {
     setCurrentPage(1);
+    setTotalPages(0); // ✅ totalPages도 초기화
   }, []);
-
-  const PAGE_SIZE = 5;
 
   useEffect(() => {
     const fetchTourSpots = async () => {
@@ -31,10 +38,11 @@ const TourSpots = () => {
 
       // 캐시에서 먼저 확인 (첫 페이지만)
       if (currentPage === 1) {
-        const cachedData = cacheManager.get<TouristSpot[]>(cacheKey);
-        if (cachedData && Array.isArray(cachedData)) {
-          setTouristSpots(cachedData);
-          return; // 캐시 데이터가 있으면 서버 요청 생략
+        const cachedData = cacheManager.get<CachedTourData>(cacheKey);
+        if (cachedData && Array.isArray(cachedData.content)) {
+          setTouristSpots(cachedData.content);
+          setTotalPages(cachedData.totalPages); // ✅ 캐시에서도 totalPages 세팅
+          return;
         }
       }
 
@@ -43,16 +51,19 @@ const TourSpots = () => {
         const response = await getTourSpotMeta(currentPage, PAGE_SIZE);
         console.log("API 응답:", response);
 
-        // API 응답에서 content 배열 추출
         const content = response?.content || [];
         const totalPagesFromApi = response?.totalPages || 0;
 
         setTouristSpots(content);
         setTotalPages(totalPagesFromApi);
 
-        // 캐시 저장 (첫 페이지만)
+        // 캐시에 content + totalPages 같이 저장
         if (currentPage === 1) {
-          cacheManager.set(cacheKey, content, 5 * 60 * 1000);
+          const cacheData: CachedTourData = {
+            content,
+            totalPages: totalPagesFromApi,
+          };
+          cacheManager.set(cacheKey, cacheData, 5 * 60 * 1000);
         }
       } catch (error) {
         console.error("관광지 목록 로드 실패:", error);
@@ -76,7 +87,6 @@ const TourSpots = () => {
     let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
     const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
 
-    // 끝 페이지가 조정되면 시작 페이지도 조정
     if (endPage - startPage + 1 < maxVisiblePages) {
       startPage = Math.max(1, endPage - maxVisiblePages + 1);
     }
@@ -129,7 +139,6 @@ const TourSpots = () => {
       {/* 페이지네이션 */}
       {totalPages > 1 && !isLoading && (
         <div className="flex justify-center items-center gap-2 mt-8">
-          {/* 이전 페이지 */}
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
@@ -138,7 +147,6 @@ const TourSpots = () => {
             이전
           </button>
 
-          {/* 페이지 번호들 */}
           {generatePageNumbers().map((pageNum) => (
             <button
               key={pageNum}
@@ -153,7 +161,6 @@ const TourSpots = () => {
             </button>
           ))}
 
-          {/* 다음 페이지 */}
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
