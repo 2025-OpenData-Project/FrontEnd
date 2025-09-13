@@ -1,9 +1,19 @@
+import { useEffect } from "react";
 import MyTitle from "../components/myPage/MyTitle";
 import MyDetailBox from "../components/myPage/MyDetailBox";
 import PastTourCard from "../components/PastTourCard";
 import TourCard from "../components/homeC/TourCard";
+import { getUserInfo } from "../api/userApi";
 
 const MyPage = () => {
+  useEffect(() => {
+    const fetchData = async () => {
+      const userInfo = await getUserInfo();
+      console.log(userInfo);
+    };
+    fetchData();
+  }, []);
+
   const mockUser = {
     email: "honggildong@example.com",
     membership: "FREE",
