@@ -47,7 +47,7 @@ baseAxiosInstance.interceptors.response.use(
         return baseAxiosInstance(originalRequest);
       } catch {
         // 토큰 갱신에 실패하면 로그인 페이지로 리다이렉트
-        //window.location.href = "/";
+        window.location.href = "/";
       }
     }
     return Promise.reject(error);
