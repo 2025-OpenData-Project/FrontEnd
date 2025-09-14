@@ -1,12 +1,6 @@
-const MyDetailBox = ({
-  email,
-  membership,
-  name,
-}: {
-  email: string;
-  membership: string;
-  name: string;
-}) => {
+import type { userInfoProps } from "../../utils/interface";
+
+const MyDetailBox = ({ email, membership, name }: userInfoProps) => {
   return (
     <div className="w-full bg-white rounded-lg shadow-sm p-6 top-24 flex">
       {/* <img src="/placeholder.svg" alt="profile" className="w-24 h-24 rounded-full" /> */}
