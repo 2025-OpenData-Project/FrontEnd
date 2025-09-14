@@ -1,24 +1,39 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import MyTitle from "../components/myPage/MyTitle";
 import MyDetailBox from "../components/myPage/MyDetailBox";
 import PastTourCard from "../components/PastTourCard";
 import TourCard from "../components/homeC/TourCard";
-import { getUserInfo } from "../api/userApi";
+import {
+  getUserInfo,
+  getUserPreferences,
+  getUserTourHistory,
+} from "../api/userApi";
+import type { userInfoProps } from "../utils/interface";
 
 const MyPage = () => {
+  const [userInfo, setUserInfo] = useState<userInfoProps>({
+    email: "",
+    membership: "",
+    name: "",
+  });
+
   useEffect(() => {
     const fetchData = async () => {
-      const userInfo = await getUserInfo();
-      console.log(userInfo);
+      const ures = await getUserInfo();
+      const pres = await getUserPreferences();
+      const tres = await getUserTourHistory();
+      setUserInfo((prev) => ({
+        ...prev,
+        email: ures.data.result.email,
+        membership: ures.data.result.membership,
+        name: ures.data.result.name,
+      }));
+      console.log(pres.data);
+      console.log(ures.data);
+      console.log(tres.data);
     };
     fetchData();
   }, []);
-
-  const mockUser = {
-    email: "honggildong@example.com",
-    membership: "FREE",
-    name: "홍길동",
-  };
 
   const mockCourses = [
     {
@@ -111,9 +126,9 @@ const MyPage = () => {
     <div className="w-full max-w-[1000px] mx-auto px-4 flex flex-col items-center">
       <MyTitle title="마이페이지" />
       <MyDetailBox
-        email={mockUser.email}
-        membership={mockUser.membership}
-        name={mockUser.name}
+        email={userInfo.email}
+        membership={userInfo.membership}
+        name={userInfo.name}
       />
 
       {/* 과거 코스 */}

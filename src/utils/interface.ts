@@ -76,3 +76,9 @@ export interface HomeTourFindApiProps {
   endTime: string;
   tourspot: string;
 }
+
+export interface userInfoProps {
+  email: string;
+  membership: string;
+  name: string;
+}
