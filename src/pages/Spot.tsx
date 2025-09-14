@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import SpotCongestion from "../components/detailSpot/SpotCongestion";
 import TourEventList from "../components/detailSpot/TourEventList";
@@ -9,11 +10,18 @@ import SpotTag from "../components/detailSpot/SpotTag";
 import SpotHeart from "../components/detailSpot/SpotHeart";
 
 import { getTourSpotDetail } from "../api/spotDetailApi";
+import { getLoginInfo } from "../api/authLoginApi";
 
 const Spot = () => {
   const [heart, setHeart] = useState<boolean>(false);
   const [data, setData] = useState<any>(null);
   const { id } = useParams();
+  const { data: loginInfo, isLoading } = useQuery({
+    queryKey: ["loginInfo"],
+    queryFn: getLoginInfo,
+    staleTime: 5 * 60 * 1000, // 5분간 캐싱 (원하는 시간으로 조정)
+    retry: 1,
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,7 +57,9 @@ const Spot = () => {
     <div className="w-full mx-auto px-4 flex flex-col items-center">
       <section className="flex items-center justify-start gap-2 w-full max-w-[1000px]">
         <SpotTitle title={tourspotNm} />
-        <SpotHeart heart={heart} setHeart={setHeart} />
+        {isLoading ? null : loginInfo ? (
+          <SpotHeart heart={heart} setHeart={setHeart} />
+        ) : null}
       </section>
 
       {/* 혼잡도 */}

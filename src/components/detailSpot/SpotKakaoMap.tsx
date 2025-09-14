@@ -11,20 +11,8 @@ const SpotKakaoMap = ({ xPos, yPos }: { xPos: number; yPos: number }) => {
 
   // SDK 로드
   useEffect(() => {
-    if (document.getElementById("kakao-map-sdk")) return;
-
-    const script = document.createElement("script");
-    script.id = "kakao-map-sdk";
-    script.async = true;
-    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${REST_API_KEY}&autoload=false`;
-    document.head.appendChild(script);
-  }, [REST_API_KEY]);
-
-  // 지도 렌더링 (좌표 변경 시마다)
-  useEffect(() => {
-    if (!window.kakao?.maps) return;
-
-    window.kakao.maps.load(() => {
+    // 지도 초기화 함수
+    const initMap = () => {
       const container = document.getElementById("map");
       if (!container) return;
 
@@ -41,8 +29,26 @@ const SpotKakaoMap = ({ xPos, yPos }: { xPos: number; yPos: number }) => {
         position: new window.kakao.maps.LatLng(yPos, xPos),
       });
       marker.setMap(map);
-    });
-  }, [xPos, yPos]);
+    };
+
+    // 이미 SDK가 로드되어 있으면 바로 지도 초기화
+    if (window.kakao?.maps) {
+      window.kakao.maps.load(initMap);
+      return;
+    }
+
+    // 아직 로드 안 되어 있으면 script 추가
+    if (!document.getElementById("kakao-map-sdk")) {
+      const script = document.createElement("script");
+      script.id = "kakao-map-sdk";
+      script.async = true;
+      script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${REST_API_KEY}&autoload=false`;
+      script.onload = () => {
+        window.kakao.maps.load(initMap);
+      };
+      document.head.appendChild(script);
+    }
+  }, [REST_API_KEY, xPos, yPos]);
 
   return (
     <div
