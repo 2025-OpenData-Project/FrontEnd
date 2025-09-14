@@ -1,3 +1,4 @@
+import axios from "axios";
 import baseAxiosInstance from "./baseAxiosApi";
 import type { HomeTourFindApiProps } from "../utils/interface";
 
@@ -21,16 +22,20 @@ export const getCourse = async ({
 };
 
 export const getTenTourSpot = async () => {
-  const response = await baseAxiosInstance.get(`/api/tourspot/rank`);
+  const response = await axios.get(
+    `${import.meta.env.VITE_API_BASE_URL}/api/tourspot/rank`,
+    { withCredentials: true },
+  );
   return response.data?.result ?? [];
 };
 
 export const getTourSpotMeta = async (page: number = 1, size: number = 5) => {
-  const response = await baseAxiosInstance.get(`/api/tourspot/meta`, {
-    params: {
-      page,
-      size,
+  const response = await axios.get(
+    `${import.meta.env.VITE_API_BASE_URL}/api/tourspot/meta`,
+    {
+      params: { page, size },
+      withCredentials: true,
     },
-  });
+  );
   return response.data?.result ?? [];
 };
