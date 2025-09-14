@@ -1,7 +1,6 @@
 import baseAxiosInstance from "./baseAxiosApi";
 import type { HomeTourFindApiProps } from "../utils/interface";
 
-//자기소개서 작성 여부 조회
 export const getCourse = async ({
   lat,
   lon,
