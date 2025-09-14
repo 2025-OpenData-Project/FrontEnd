@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { X, AlertTriangle } from "lucide-react";
-import KakaoMap from "../components/KakaoMap";
+import KakaoMap from "../components/CourseDetail/KakaoMap";
 
 // API 응답 데이터 인터페이스
 interface ApiCourseComponent {
