@@ -1,0 +1,49 @@
+import { useNavigate } from "react-router-dom";
+
+const MyModal = ({ setIsOpen }: { setIsOpen: (isOpen: boolean) => void }) => {
+  const onClose = () => setIsOpen(false);
+  const navigate = useNavigate();
+
+  return (
+    <div className="bg-white rounded-xl shadow-lg p-4 min-w-[180px] border border-gray-200 flex flex-col items-stretch gap-2">
+      <div className="flex justify-end">
+        <button
+          className="text-gray-400 hover:text-gray-600 text-lg font-bold"
+          onClick={onClose}
+          aria-label="닫기"
+        >
+          ×
+        </button>
+      </div>
+      <button
+        className="w-full px-3 py-2 rounded-md text-left hover:bg-gray-100 transition"
+        onClick={() => {
+          navigate("/home");
+          setIsOpen(false);
+        }}
+      >
+        홈
+      </button>
+      <button
+        className="w-full px-3 py-2 rounded-md text-left hover:bg-gray-100 transition"
+        onClick={() => {
+          navigate("/my-page");
+          setIsOpen(false);
+        }}
+      >
+        마이페이지
+      </button>
+      <button
+        className="w-full px-3 py-2 rounded-md text-left hover:bg-gray-100 transition text-red-500"
+        onClick={() => {
+          navigate("/");
+          setIsOpen(false);
+        }}
+      >
+        로그아웃
+      </button>
+    </div>
+  );
+};
+
+export default MyModal;
