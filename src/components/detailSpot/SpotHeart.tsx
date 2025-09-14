@@ -16,9 +16,10 @@ const SpotHeart = ({
         if (!tourspotId) return;
         const id = Number(tourspotId);
         const response = await getIsHeart(id);
-        setHeart(response.result); // 서버에서 받은 좋아요 상태로 설정
+        setHeart(response?.result ?? false); // 서버에서 받은 좋아요 상태로 설정
       } catch (error) {
         console.error("Error fetching heart status:", error);
+        setHeart(false); // 에러 시 기본값으로 false 설정
       }
     };
     fetchHeartStatus();

@@ -14,7 +14,7 @@ export const getTourSpotDetail = async ({
 
 export const getIsHeart = async (tourspotId: number) => {
   const response = await baseAxiosInstance.get(
-    `/mypage/preferences/check${tourspotId}`,
+    `/mypage/preferences/check/${tourspotId}`,
     {},
   );
   return response.data;
@@ -22,7 +22,7 @@ export const getIsHeart = async (tourspotId: number) => {
 
 export const addHeart = async (tourspotId: number) => {
   const response = await baseAxiosInstance.post(
-    `/mypage/preferences${tourspotId}`,
+    `/mypage/preferences/${tourspotId}`,
     {},
   );
   return response.data;
@@ -30,7 +30,7 @@ export const addHeart = async (tourspotId: number) => {
 
 export const deleteHeart = async (tourspotId: number) => {
   const response = await baseAxiosInstance.delete(
-    `/mypage/preferences${tourspotId}`,
+    `/mypage/preferences/${tourspotId}`,
     {},
   );
   return response.data;
