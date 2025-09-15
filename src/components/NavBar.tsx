@@ -10,6 +10,7 @@ const NavBar = () => {
     queryFn: getLoginInfo,
     staleTime: 5 * 60 * 1000, // 5분간 캐싱 (원하는 시간으로 조정)
     retry: 1,
+    refetchOnWindowFocus: false,
   });
 
   return (
