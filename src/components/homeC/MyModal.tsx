@@ -2,7 +2,13 @@ import { useNavigate } from "react-router-dom";
 import { logOut } from "../../api/userApi";
 
 const MyModal = ({ setIsOpen }: { setIsOpen: (isOpen: boolean) => void }) => {
-  const onClose = async () => {
+  const navigate = useNavigate();
+
+  const onClose = () => {
+    setIsOpen(false);
+  };
+
+  const handleLogOut = async () => {
     try {
       await logOut();
     } catch (error) {
@@ -10,10 +16,9 @@ const MyModal = ({ setIsOpen }: { setIsOpen: (isOpen: boolean) => void }) => {
       console.error("로그아웃 실패:", error);
       return;
     }
-
+    navigate("/");
     setIsOpen(false);
   };
-  const navigate = useNavigate();
 
   return (
     <div className="bg-white rounded-xl shadow-lg p-4 min-w-[180px] border border-gray-200 flex flex-col items-stretch gap-2">
@@ -47,8 +52,7 @@ const MyModal = ({ setIsOpen }: { setIsOpen: (isOpen: boolean) => void }) => {
       <button
         className="w-full px-3 py-2 rounded-md text-left hover:bg-gray-100 transition text-red-500"
         onClick={() => {
-          navigate("/");
-          setIsOpen(false);
+          handleLogOut();
         }}
       >
         로그아웃
