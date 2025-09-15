@@ -1,7 +1,9 @@
 import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 import { logOut } from "../../api/userApi";
 
 const MyModal = ({ setIsOpen }: { setIsOpen: (isOpen: boolean) => void }) => {
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   const onClose = () => {
@@ -11,6 +13,8 @@ const MyModal = ({ setIsOpen }: { setIsOpen: (isOpen: boolean) => void }) => {
   const handleLogOut = async () => {
     try {
       await logOut();
+      // 로그인 정보 캐시 무효화
+      queryClient.invalidateQueries({ queryKey: ["loginInfo"] });
     } catch (error) {
       alert("로그아웃에 실패했습니다. 다시 시도해주세요.");
       console.error("로그아웃 실패:", error);
