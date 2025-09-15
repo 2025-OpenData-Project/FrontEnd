@@ -14,9 +14,7 @@ const MyModal = ({ setIsOpen }: { setIsOpen: (isOpen: boolean) => void }) => {
     try {
       await logOut();
       // 로그인 정보 캐시 무효화
-      await queryClient.refetchQueries({
-        queryKey: ["loginInfo"],
-      });
+      await queryClient.setQueryData(["loginInfo"], null);
     } catch (error) {
       alert("로그아웃에 실패했습니다. 다시 시도해주세요.");
       console.error("로그아웃 실패:", error);
