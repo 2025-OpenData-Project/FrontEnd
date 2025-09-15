@@ -14,3 +14,8 @@ export const getUserTourHistory = async () => {
   const response = await baseAxiosInstance.get(`/mypage/courses`, {});
   return response;
 };
+
+export const logOut = async () => {
+  const response = await baseAxiosInstance.post(`/logout`);
+  return response;
+};
