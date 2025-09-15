@@ -16,6 +16,6 @@ export const getUserTourHistory = async () => {
 };
 
 export const logOut = async () => {
-  const response = await baseAxiosInstance.post(`/logout`);
+  const response = await baseAxiosInstance.post(`/logout`, {});
   return response;
 };
