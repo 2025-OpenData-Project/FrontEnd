@@ -1,7 +1,18 @@
 import { useNavigate } from "react-router-dom";
+import { logOut } from "../../api/userApi";
 
 const MyModal = ({ setIsOpen }: { setIsOpen: (isOpen: boolean) => void }) => {
-  const onClose = () => setIsOpen(false);
+  const onClose = async () => {
+    try {
+      await logOut();
+    } catch (error) {
+      alert("로그아웃에 실패했습니다. 다시 시도해주세요.");
+      console.error("로그아웃 실패:", error);
+      return;
+    }
+
+    setIsOpen(false);
+  };
   const navigate = useNavigate();
 
   return (
