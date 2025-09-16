@@ -64,7 +64,7 @@ const HomeTourList = () => {
     <div className="container mx-auto px-4 py-8 max-w-6xl">
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-4">
-          <h1 className="text-3xl font-bold">관광지 목록</h1>
+          <h1 className="text-3xl font-bold">인기 관광지</h1>
           <button
             onClick={() => navigate("/tourspots")}
             className="text-gray-500 underline hover:text-gray-700 transition-colors"

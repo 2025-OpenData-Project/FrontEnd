@@ -40,8 +40,14 @@ const Spot = () => {
     return <div className="w-full text-center py-10">로딩 중...</div>;
   }
 
-  const { congestionLabel, tourSpotEvents, tourspotNm, address, tourSpotTags } =
-    data;
+  const {
+    congestionLabel,
+    tourSpotEvents,
+    tourspotNm,
+    address,
+    tourSpotTags,
+    imageUrl,
+  } = data;
 
   const safeCongestionLabel = congestionLabel ?? "정보 없음";
   const safeTourSpotEvents = Array.isArray(tourSpotEvents)
@@ -65,9 +71,15 @@ const Spot = () => {
       {/* 혼잡도 */}
       <SpotCongestion congestion={safeCongestionLabel} />
       <SpotTag spotTags={tourSpotTags} />
-
-      <SpotKakaoMap xPos={safeAddress.longitude} yPos={safeAddress.latitude} />
-      <SpotAddressCopy address={safeAddress.addressDetail} />
+      {imageUrl && (
+        <div className="w-full max-w-[500px] max-h-[500px] mb-6 flex justify-center">
+          <img
+            src={imageUrl}
+            alt={tourspotNm}
+            className="rounded-xl shadow-lg object-cover w-full h-auto"
+          />
+        </div>
+      )}
       <SpotTitle title={"관광지 소개"} />
       <div className="w-full max-w-[1000px] mx-auto py-4 text-justify text-xl">
         경복궁은 1395년 태조 이성계에 의해 조선왕조의 법궁으로 창건되었습니다.
@@ -81,7 +93,11 @@ const Spot = () => {
         있습니다. 사계절 내내 아름다운 풍경을 자랑하며, 특히 봄의 벚꽃과 가을의
         단풍이 장관을 이룹니다.
       </div>
+      <SpotKakaoMap xPos={safeAddress.longitude} yPos={safeAddress.latitude} />
+      <SpotAddressCopy address={safeAddress.addressDetail} />
+
       {/* 이벤트 목록 */}
+      <SpotTitle title={"진행중인 이벤트"} />
       <TourEventList events={safeTourSpotEvents} />
     </div>
   );
