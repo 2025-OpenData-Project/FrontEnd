@@ -6,6 +6,7 @@ import Layout from "./layout/Layout.tsx";
 import Spot from "./pages/Spot.tsx";
 import MyPage from "./pages/MyPage.tsx";
 import TourSpots from "./pages/TourSpots.tsx";
+import CourseDetail from "./pages/CourseDetail.tsx";
 
 const routes = createBrowserRouter([
   {
@@ -39,6 +40,14 @@ const routes = createBrowserRouter([
       {
         path: "tourspots",
         element: <TourSpots />,
+      },
+      {
+        path: "courseDetail",
+        element: <CourseDetail />,
+      },
+      {
+        path: "courseDetail/:courseId",
+        element: <CourseDetail />,
       },
     ],
   },
