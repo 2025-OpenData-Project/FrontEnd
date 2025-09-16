@@ -494,7 +494,7 @@ const CourseDetail = () => {
         </div>
 
         {/* 중간 사이드바 - 선택된 코스 상세 정보 */}
-        <div className="w-96 bg-white border-r border-gray-200 min-h-screen">
+        <div className="w-96 bg-white border-r border-gray-200 h-[calc(100vh-120px)] overflow-y-auto">
           {currentCourse ? (
             <>
               {/* 코스 헤더 */}
