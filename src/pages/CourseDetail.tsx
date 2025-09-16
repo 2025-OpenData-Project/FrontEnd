@@ -752,7 +752,7 @@ const CourseDetail = () => {
           <div className="fixed inset-0 z-50 flex">
             {/* 배경 오버레이 */}
             <div
-              className="flex-1 bg-black bg-opacity-10"
+              className="flex-1 bg-transparent"
               onClick={() => setShowSideDrawer(false)}
             />
 
