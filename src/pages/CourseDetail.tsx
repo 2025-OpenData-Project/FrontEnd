@@ -78,9 +78,14 @@ const CourseDetail = () => {
   // 좋아요 토글 함수
   const toggleCourseLike = async (courseId: string) => {
     try {
+      // tempCourse: 접두사 제거
+      const cleanCourseId = courseId.replace("tempCourse:", "");
+      console.log("원본 courseId:", courseId);
+      console.log("정리된 courseId:", cleanCourseId);
+
       if (likedCourses.has(courseId)) {
         // 좋아요 취소
-        await unlikeCourse(courseId);
+        await unlikeCourse(cleanCourseId);
         setLikedCourses((prev) => {
           const newSet = new Set(prev);
           newSet.delete(courseId);
@@ -88,12 +93,12 @@ const CourseDetail = () => {
         });
       } else {
         // 좋아요 등록
-        const response = await likeCourse(courseId);
+        const response = await likeCourse(cleanCourseId);
 
         // API 응답의 isSuccess 필드 확인
         if (response.isSuccess) {
           setLikedCourses((prev) => new Set(prev).add(courseId));
-          console.log(`좋아요 등록 성공: ${courseId}`);
+          console.log(`좋아요 등록 성공: ${cleanCourseId}`);
         } else {
           console.error("좋아요 등록 실패:", response.message);
           alert(`좋아요 등록에 실패했습니다: ${response.message}`);
@@ -747,7 +752,7 @@ const CourseDetail = () => {
           <div className="fixed inset-0 z-50 flex">
             {/* 배경 오버레이 */}
             <div
-              className="flex-1 bg-black bg-opacity-50"
+              className="flex-1 bg-black bg-opacity-10"
               onClick={() => setShowSideDrawer(false)}
             />
 
@@ -828,30 +833,14 @@ const CourseDetail = () => {
                         <p className="font-medium text-gray-900 text-sm">
                           {spot.tourSpotName}
                         </p>
-                        <span className="px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-800">
-                          {spot.largeCtgr}
-                        </span>
-                      </div>
-                      <div className="flex items-center space-x-3 text-xs text-gray-600 mb-2">
-                        <span className="flex items-center space-x-1">
-                          <span>🏛️</span>
-                          <span>{spot.middleCtgr}</span>
-                        </span>
-                        <span className="flex items-center space-x-1">
-                          <span>📍</span>
-                          <span>
-                            {spot.mapX.toFixed(4)}, {spot.mapY.toFixed(4)}
+                        <div className="flex items-center gap-2">
+                          <span className="px-2 py-1 rounded text-xs font-medium bg-red-100 text-red-800">
+                            {spot.middleCtgr}
                           </span>
-                        </span>
-                      </div>
-                      <div className="flex items-center justify-between text-xs text-gray-500">
-                        <span>ID: {spot.id}</span>
-                        <span className="bg-gray-100 px-2 py-1 rounded">
-                          {spot.tourSpotCode.slice(0, 8)}...
-                        </span>
-                      </div>
-                      <div className="mt-2 w-full h-16 bg-gray-100 rounded flex items-center justify-center text-gray-500 text-xs">
-                        📷 {spot.tourSpotName} 사진
+                          <span className="px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-800">
+                            {spot.largeCtgr}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   ))
@@ -866,13 +855,6 @@ const CourseDetail = () => {
                     </p>
                   </div>
                 )}
-
-                {/* 관광지 변경 버튼 */}
-                <div className="sticky bottom-0 bg-white pt-4 border-t border-gray-200">
-                  <button className="w-full bg-blue-500 text-white py-3 rounded-lg font-medium hover:bg-blue-600 transition-colors">
-                    관광지 변경하기
-                  </button>
-                </div>
               </div>
             </div>
           </div>
