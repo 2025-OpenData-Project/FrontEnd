@@ -2,6 +2,11 @@ import { useState, useEffect } from "react";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { X, AlertTriangle } from "lucide-react";
 import KakaoMap from "../components/courseDetail/KakaoMap.tsx";
+import {
+  likeCourse,
+  unlikeCourse,
+  getRelatedTourSpots,
+} from "../api/courseDetailApi.ts";
 
 // API 응답 데이터 인터페이스
 interface ApiCourseComponent {
@@ -64,44 +69,81 @@ const CourseDetail = () => {
   const [selectedPlaceForAlternatives, setSelectedPlaceForAlternatives] =
     useState<Place | null>(null);
   const [likedCourses, setLikedCourses] = useState<Set<string>>(new Set());
+  const [relatedTourSpots, setRelatedTourSpots] = useState<any[]>([]);
+  const [isLoadingRelatedSpots, setIsLoadingRelatedSpots] = useState(false);
 
   // 좋아요 토글 함수
   const toggleCourseLike = async (courseId: string) => {
     try {
-      const baseURL = import.meta.env.VITE_API_BASE_URL;
-
       if (likedCourses.has(courseId)) {
-        // 이미 좋아요된 상태면 좋아요 취소 (DELETE API가 있다면)
-        // 현재는 POST만 제공되므로 클라이언트에서만 토글
+        // 좋아요 취소
+        await unlikeCourse(courseId);
         setLikedCourses((prev) => {
           const newSet = new Set(prev);
           newSet.delete(courseId);
           return newSet;
         });
-        console.log(`좋아요 취소: ${courseId}`);
       } else {
         // 좋아요 등록
-        const response = await fetch(`${baseURL}/course/like/${courseId}`, {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await likeCourse(courseId);
 
-        if (response.ok) {
+        // API 응답의 isSuccess 필드 확인
+        if (response.isSuccess) {
           setLikedCourses((prev) => new Set(prev).add(courseId));
           console.log(`좋아요 등록 성공: ${courseId}`);
         } else {
-          console.error("좋아요 등록 실패:", response.status);
-          if (response.status === 401) {
-            alert("로그인이 필요합니다.");
-          }
+          console.error("좋아요 등록 실패:", response.message);
+          alert(`좋아요 등록에 실패했습니다: ${response.message}`);
         }
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("좋아요 처리 중 오류:", error);
-      alert("좋아요 처리 중 오류가 발생했습니다.");
+
+      if (error.response?.status === 401) {
+        alert("인증이 필요합니다. 로그인 후 다시 시도해주세요.");
+      } else if (error.response?.data?.message) {
+        alert(`좋아요 등록에 실패했습니다: ${error.response.data.message}`);
+      } else {
+        alert(
+          "좋아요 처리 중 오류가 발생했습니다. 네트워크 연결을 확인해주세요.",
+        );
+      }
+    }
+  };
+
+  // 연관 관광지 조회 함수
+  const fetchRelatedTourSpots = async (placeId: number) => {
+    try {
+      setIsLoadingRelatedSpots(true);
+      const response = await getRelatedTourSpots(placeId);
+
+      if (response.isSuccess) {
+        // 중복 제거 (tourSpotName 기준) 및 최대 10개로 제한
+        const uniqueSpots = response.result
+          .filter(
+            (spot, index, self) =>
+              index ===
+              self.findIndex((s) => s.tourSpotName === spot.tourSpotName),
+          )
+          .slice(0, 10); // 최대 10개만 표시
+        setRelatedTourSpots(uniqueSpots);
+      } else {
+        console.error("연관 관광지 조회 실패:", response.message);
+        setRelatedTourSpots([]);
+      }
+    } catch (error: any) {
+      console.error("연관 관광지 조회 중 오류:", error);
+      setRelatedTourSpots([]);
+
+      if (error.response?.status === 404) {
+        alert("연관 관광지를 찾을 수 없습니다.");
+      } else if (error.response?.status === 500) {
+        alert("서버 에러가 발생했습니다. 관리자에게 문의해주세요.");
+      } else {
+        alert("연관 관광지 조회 중 오류가 발생했습니다.");
+      }
+    } finally {
+      setIsLoadingRelatedSpots(false);
     }
   };
 
@@ -508,6 +550,8 @@ const CourseDetail = () => {
                                 onClick={() => {
                                   setSelectedPlaceForAlternatives(place);
                                   setShowSideDrawer(true);
+                                  // 연관 관광지 조회
+                                  fetchRelatedTourSpots(place.id);
                                 }}
                               >
                                 <div className="flex items-start space-x-3">
@@ -731,80 +775,71 @@ const CourseDetail = () => {
                   </div>
                 )}
 
-                {/* 대체 관광지 목록 (임시 데이터) */}
-                {[
-                  {
-                    name: "경복궁",
-                    crowdLevel: "low",
-                    distance: "도보 5분",
-                    type: "궁궐",
-                  },
-                  {
-                    name: "창덕궁",
-                    crowdLevel: "low",
-                    distance: "도보 10분",
-                    type: "궁궐",
-                  },
-                  {
-                    name: "인사동",
-                    crowdLevel: "medium",
-                    distance: "도보 7분",
-                    type: "문화거리",
-                  },
-                  {
-                    name: "북촌한옥마을",
-                    crowdLevel: "medium",
-                    distance: "도보 12분",
-                    type: "전통마을",
-                  },
-                  {
-                    name: "광화문광장",
-                    crowdLevel: "high",
-                    distance: "도보 8분",
-                    type: "광장",
-                  },
-                ]
-                  .sort((a, b) => {
-                    const levelOrder = { low: 0, medium: 1, high: 2 };
-                    return (
-                      levelOrder[a.crowdLevel as keyof typeof levelOrder] -
-                      levelOrder[b.crowdLevel as keyof typeof levelOrder]
-                    );
-                  })
-                  .map((place, index) => (
+                {/* 연관 관광지 목록 */}
+                {!isLoadingRelatedSpots && relatedTourSpots.length > 0 && (
+                  <div className="mb-3 px-1">
+                    <p className="text-sm text-gray-600">
+                      총 {relatedTourSpots.length}개의 연관 관광지를 찾았습니다
+                    </p>
+                  </div>
+                )}
+                {isLoadingRelatedSpots ? (
+                  <div className="flex items-center justify-center py-8">
+                    <div className="flex items-center space-x-2">
+                      <div className="w-4 h-4 border-2 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
+                      <span className="text-sm text-gray-600">
+                        연관 관광지를 불러오는 중...
+                      </span>
+                    </div>
+                  </div>
+                ) : relatedTourSpots.length > 0 ? (
+                  relatedTourSpots.map((spot) => (
                     <div
-                      key={index}
+                      key={spot.id}
                       className="border border-gray-200 rounded-lg p-3 hover:bg-gray-50 cursor-pointer transition-colors"
                     >
                       <div className="flex items-center justify-between mb-2">
-                        <p className="font-medium text-gray-900">
-                          {place.name}
+                        <p className="font-medium text-gray-900 text-sm">
+                          {spot.tourSpotName}
                         </p>
-                        <span
-                          className={`px-2 py-1 rounded text-xs font-medium ${
-                            place.crowdLevel === "high"
-                              ? "bg-red-100 text-red-800"
-                              : place.crowdLevel === "medium"
-                                ? "bg-yellow-100 text-yellow-800"
-                                : "bg-green-100 text-green-800"
-                          }`}
-                        >
-                          {place.crowdLevel === "high"
-                            ? "혼잡"
-                            : place.crowdLevel === "medium"
-                              ? "보통"
-                              : "여유"}
+                        <span className="px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-800">
+                          {spot.largeCtgr}
                         </span>
                       </div>
-                      <div className="flex items-center space-x-3 text-xs text-gray-600">
-                        <span>📍 {place.distance}</span>
-                        <span>🏛️ {place.type}</span>
+                      <div className="flex items-center space-x-3 text-xs text-gray-600 mb-2">
+                        <span className="flex items-center space-x-1">
+                          <span>🏛️</span>
+                          <span>{spot.middleCtgr}</span>
+                        </span>
+                        <span className="flex items-center space-x-1">
+                          <span>📍</span>
+                          <span>
+                            {spot.mapX.toFixed(4)}, {spot.mapY.toFixed(4)}
+                          </span>
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between text-xs text-gray-500">
+                        <span>ID: {spot.id}</span>
+                        <span className="bg-gray-100 px-2 py-1 rounded">
+                          {spot.tourSpotCode.slice(0, 8)}...
+                        </span>
                       </div>
                       <div className="mt-2 w-full h-16 bg-gray-100 rounded flex items-center justify-center text-gray-500 text-xs">
-                        📷 {place.name} 사진
+                        📷 {spot.tourSpotName} 사진
                       </div>
                     </div>
-                  ))}
+                  ))
+                ) : (
+                  <div className="text-center py-8">
+                    <div className="text-4xl mb-4">🔍</div>
+                    <p className="text-sm font-medium text-gray-600 mb-2">
+                      연관 관광지가 없습니다
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      이 관광지 주변에는 추천할 만한 다른 관광지가 없습니다.
+                    </p>
+                  </div>
+                )}
 
                 {/* 관광지 변경 버튼 */}
                 <div className="sticky bottom-0 bg-white pt-4 border-t border-gray-200">
