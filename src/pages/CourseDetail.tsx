@@ -479,18 +479,6 @@ const CourseDetail = () => {
               ))}
             </div>
           </div>
-
-          {/* 하단 버튼 */}
-          <div className="p-3 border-t border-gray-200">
-            <div className="flex space-x-2">
-              <button className="flex-1 py-1 text-xs border border-gray-300 text-gray-700 rounded hover:bg-gray-50 transition-colors">
-                취소
-              </button>
-              <button className="flex-1 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">
-                적용
-              </button>
-            </div>
-          </div>
         </div>
 
         {/* 중간 사이드바 - 선택된 코스 상세 정보 */}
