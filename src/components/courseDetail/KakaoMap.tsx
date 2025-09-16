@@ -34,6 +34,17 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ places, courseName }) => {
         const script = document.createElement("script");
         script.type = "text/javascript";
         const apiKey = import.meta.env.VITE_KAKAO_MAP_API_KEY;
+
+        // API 키 확인 로그
+        console.log("Kakao Map API Key:", apiKey);
+
+        if (!apiKey) {
+          console.error(
+            "카카오 지도 API 키가 설정되지 않았습니다. .env 파일에 VITE_KAKAO_MAP_API_KEY를 설정해주세요.",
+          );
+          return;
+        }
+
         script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${apiKey}&autoload=false`;
         script.onload = () => {
           window.kakao.maps.load(() => {
