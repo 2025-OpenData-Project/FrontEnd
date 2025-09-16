@@ -2,22 +2,26 @@ import type { SlideData } from "../utils/interface";
 
 export const touristSpots: SlideData[] = [
   {
-    image: "https://placehold.co/800x400",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Hanok_house_at_the_corner_of_a_sloping_street_at_blue_hour_in_Bukchon_Hanok_Village_in_Seoul.jpg/640px-Hanok_house_at_the_corner_of_a_sloping_street_at_blue_hour_in_Bukchon_Hanok_Village_in_Seoul.jpg",
     name: "북촌 한옥마을",
     description: "전통 한옥의 아름다움을 느낄 수 있는 조용한 골목길",
   },
   {
-    image: "https://placehold.co/800x400",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/%EC%9D%B4%ED%99%94%EB%8F%99_%EB%B2%BD%ED%99%94%EB%A7%88%EC%9D%84_01.jpg/640px-%EC%9D%B4%ED%99%94%EB%8F%99_%EB%B2%BD%ED%99%94%EB%A7%88%EC%9D%84_01.jpg",
     name: "이화동 벽화마을",
     description: "알록달록한 벽화와 함께하는 예술적인 산책",
   },
   {
-    image: "https://placehold.co/800x400",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Seoul_Forest_%EC%84%9C%EC%9A%B8%EC%88%B2.jpg/640px-Seoul_Forest_%EC%84%9C%EC%9A%B8%EC%88%B2.jpg",
     name: "서울숲",
     description: "도심 속 자연을 만끽할 수 있는 힐링 공간",
   },
   {
-    image: "https://placehold.co/800x400",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Cheonggyecheon_stream_at_sunrise_with_trees_in_Seoul.jpg/640px-Cheonggyecheon_stream_at_sunrise_with_trees_in_Seoul.jpg",
     name: "청계천",
     description: "도심을 가로지르는 평화로운 물길",
   },

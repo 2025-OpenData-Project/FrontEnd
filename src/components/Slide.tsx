@@ -22,7 +22,7 @@ const Slide = () => {
               alt={image.name}
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-black bg-opacity-40 flex items-end">
+            <div className="absolute inset-0 flex items-end">
               <div className="p-8 text-white">
                 <h2 className="text-3xl font-bold mb-2">{image.name}</h2>
                 <p className="text-lg opacity-90">{image.description}</p>
