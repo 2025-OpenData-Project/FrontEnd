@@ -10,12 +10,14 @@ import {
 
 // API 응답 데이터 인터페이스
 interface ApiCourseComponent {
+  addressId: number;
   tourSpotName: string;
   tourspotId: number;
   congestionLevel: "여유" | "보통" | "혼잡";
   time: string;
   lat: number;
   lon: number;
+  tourspotImg?: string;
 }
 
 interface ApiCourse {
@@ -32,6 +34,7 @@ interface ApiResponse {
 
 interface Place {
   id: number;
+  addressId: number;
   name: string;
   type: "attraction" | "restaurant" | "accommodation";
   typeLabel: string;
@@ -112,10 +115,11 @@ const CourseDetail = () => {
   };
 
   // 연관 관광지 조회 함수
-  const fetchRelatedTourSpots = async (placeId: number) => {
+  const fetchRelatedTourSpots = async (addressId: number) => {
     try {
       setIsLoadingRelatedSpots(true);
-      const response = await getRelatedTourSpots(placeId);
+      console.log("연관 관광지 조회 - addressId:", addressId);
+      const response = await getRelatedTourSpots(addressId);
 
       if (response.isSuccess) {
         // 중복 제거 (tourSpotName 기준) 및 최대 10개로 제한
@@ -255,12 +259,13 @@ const CourseDetail = () => {
 
           return {
             id: component.tourspotId,
+            addressId: component.addressId,
             name: component.tourSpotName,
             type: "attraction" as const,
             typeLabel: "명소",
             time: `${timeStr}-${timeStr}`,
             duration,
-            image: "/attraction.jpg", // 기본 이미지
+            image: component.tourspotImg || "/attraction.jpg", // API 이미지 또는 기본 이미지
             crowdLevel: convertCongestionLevel(component.congestionLevel),
             coordinates: { lat: component.lat, lng: component.lon },
             completed: false,
@@ -550,8 +555,13 @@ const CourseDetail = () => {
                                 onClick={() => {
                                   setSelectedPlaceForAlternatives(place);
                                   setShowSideDrawer(true);
-                                  // 연관 관광지 조회
-                                  fetchRelatedTourSpots(place.id);
+                                  // 연관 관광지 조회 (addressId 사용)
+                                  console.log("관광지 클릭 - place:", place);
+                                  console.log(
+                                    "사용할 addressId:",
+                                    place.addressId,
+                                  );
+                                  fetchRelatedTourSpots(place.addressId);
                                 }}
                               >
                                 <div className="flex items-start space-x-3">
@@ -623,7 +633,23 @@ const CourseDetail = () => {
 
                                 {/* 장소 이미지 */}
                                 <div className="mt-3">
-                                  <div className="w-full h-16 bg-gray-200 rounded flex items-center justify-center text-gray-500 text-xs cursor-pointer hover:bg-gray-300 transition-colors">
+                                  {place.image &&
+                                  place.image !== "/attraction.jpg" ? (
+                                    <img
+                                      src={place.image}
+                                      alt={place.name}
+                                      className="w-full h-16 object-cover rounded"
+                                      onError={(e) => {
+                                        e.currentTarget.style.display = "none";
+                                        e.currentTarget.nextElementSibling?.classList.remove(
+                                          "hidden",
+                                        );
+                                      }}
+                                    />
+                                  ) : null}
+                                  <div
+                                    className={`w-full h-16 bg-gray-200 rounded flex items-center justify-center text-gray-500 text-xs cursor-pointer hover:bg-gray-300 transition-colors ${place.image && place.image !== "/attraction.jpg" ? "hidden" : ""}`}
+                                  >
                                     📷 {place.name} 사진
                                   </div>
                                 </div>
