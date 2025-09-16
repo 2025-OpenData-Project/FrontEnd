@@ -26,16 +26,25 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ places, courseName }) => {
 
   // 카카오 지도 API 로딩 확인
   useEffect(() => {
-    const checkKakaoLoaded = () => {
+    const loadKakaoMap = () => {
       if (window.kakao && window.kakao.maps) {
         setIsKakaoLoaded(true);
       } else {
-        // API가 로드되지 않았으면 100ms 후 다시 확인
-        setTimeout(checkKakaoLoaded, 100);
+        // API가 로드되지 않았으면 동적으로 로드
+        const script = document.createElement("script");
+        script.type = "text/javascript";
+        const apiKey = import.meta.env.VITE_KAKAO_MAP_API_KEY;
+        script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${apiKey}&autoload=false`;
+        script.onload = () => {
+          window.kakao.maps.load(() => {
+            setIsKakaoLoaded(true);
+          });
+        };
+        document.head.appendChild(script);
       }
     };
 
-    checkKakaoLoaded();
+    loadKakaoMap();
   }, []);
 
   useEffect(() => {
