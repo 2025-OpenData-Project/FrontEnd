@@ -587,7 +587,7 @@ const CourseDetail = () => {
                                     </div>
 
                                     <div className="flex items-center space-x-3 text-xs text-gray-600">
-                                      <span>⏰ {place.time}</span>
+                                      <span>⏰ {place.time.split("-")[0]}</span>
                                       <span
                                         className={`px-2 py-1 rounded text-xs font-medium ${crowdLevelBg[place.crowdLevel]}`}
                                       >
