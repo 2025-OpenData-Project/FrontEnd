@@ -2,7 +2,7 @@ import { MapPin } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const MainPageLogo = () => {
-  const title: string = "서울 여유 여행";
+  const title: string = "Yourse Seoul";
   const subtitle: string = "붐비는 곳은 피하고, 여유롭게 즐기는 서울 관광";
   //번역을 생각해서 변수로 문자 선언
   const navigate = useNavigate();
