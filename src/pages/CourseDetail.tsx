@@ -396,7 +396,7 @@ const CourseDetail = () => {
         </div>
       )}
 
-      <div className="flex">
+      <div className="flex h-screen">
         {/* 왼쪽 사이드바 - 코스 선택 */}
         <div className="w-64 bg-white border-r border-gray-200 min-h-screen">
           {/* 헤더 */}
@@ -446,9 +446,6 @@ const CourseDetail = () => {
                       <p className="text-sm font-medium text-gray-900">
                         {course.name}
                       </p>
-                      <div className="text-xs text-gray-500 bg-gray-100 px-1 py-0.5 rounded">
-                        {course.duration}
-                      </div>
                     </div>
                     <div className="flex justify-between items-center">
                       <p className="text-xs text-gray-600 text-left">
@@ -482,7 +479,7 @@ const CourseDetail = () => {
         </div>
 
         {/* 중간 사이드바 - 선택된 코스 상세 정보 */}
-        <div className="w-96 bg-white border-r border-gray-200 h-[calc(100vh-120px)] flex flex-col">
+        <div className="w-100 bg-white border-r border-gray-200 h-screen flex flex-col">
           {currentCourse ? (
             <>
               {/* 코스 헤더 */}
@@ -493,9 +490,6 @@ const CourseDetail = () => {
                 <p className="text-sm text-gray-600 mb-2">
                   {currentCourse.description}
                 </p>
-                <div className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded inline-block">
-                  {currentCourse.duration}
-                </div>
               </div>
 
               {/* 일차별 코스 상세 */}
@@ -591,7 +585,6 @@ const CourseDetail = () => {
                                       <span
                                         className={`px-2 py-1 rounded text-xs font-medium ${crowdLevelBg[place.crowdLevel]}`}
                                       >
-                                        👥{" "}
                                         {place.crowdLevel === "high"
                                           ? "혼잡"
                                           : place.crowdLevel === "medium"
@@ -618,9 +611,7 @@ const CourseDetail = () => {
                                         <span className="text-xs">✓</span>
                                       )}
                                     </button>
-                                    <button className="text-gray-400 hover:text-gray-600">
-                                      <span className="text-xs">⋯</span>
-                                    </button>
+                                    <button className="text-gray-400 hover:text-gray-600"></button>
                                   </div>
                                 </div>
 
