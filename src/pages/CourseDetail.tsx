@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { X, AlertTriangle } from "lucide-react";
 import KakaoMap from "../components/courseDetail/KakaoMap.tsx";
+import SpotCongestion from "../components/detailSpot/SpotCongestion.tsx";
 import {
   likeCourse,
   unlikeCourse,
@@ -519,15 +520,23 @@ const CourseDetail = () => {
                           );
                           const isCurrentPlace =
                             placeIndex === currentPlaceIndex;
+                          const getCongestionColor = (level: string) => {
+                            switch (level) {
+                              case "high":
+                                return "bg-red-500";
+                              case "medium":
+                                return "bg-yellow-500";
+                              case "low":
+                                return "bg-green-500";
+                              default:
+                                return "bg-gray-500";
+                            }
+                          };
+
                           const crowdLevelColors = {
                             high: "border-red-500",
                             medium: "border-yellow-500",
                             low: "border-green-500",
-                          };
-                          const crowdLevelBg = {
-                            high: "bg-red-100",
-                            medium: "bg-yellow-100",
-                            low: "bg-green-100",
                           };
 
                           return (
@@ -554,13 +563,7 @@ const CourseDetail = () => {
                                 <div className="flex items-start space-x-3">
                                   {/* 순서 번호 */}
                                   <div
-                                    className={`w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold ${
-                                      place.crowdLevel === "high"
-                                        ? "bg-red-500"
-                                        : place.crowdLevel === "medium"
-                                          ? "bg-yellow-500"
-                                          : "bg-green-500"
-                                    }`}
+                                    className={`w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold ${getCongestionColor(place.crowdLevel)}`}
                                   >
                                     {placeIndex + 1}
                                   </div>
@@ -580,17 +583,21 @@ const CourseDetail = () => {
                                       )}
                                     </div>
 
-                                    <div className="flex items-center space-x-3 text-xs text-gray-600">
-                                      <span>⏰ {place.time.split("-")[0]}</span>
-                                      <span
-                                        className={`px-2 py-1 rounded text-xs font-medium ${crowdLevelBg[place.crowdLevel]}`}
-                                      >
-                                        {place.crowdLevel === "high"
-                                          ? "혼잡"
-                                          : place.crowdLevel === "medium"
-                                            ? "보통"
-                                            : "여유"}
+                                    <div className="h-5 flex items-center gap-2 text-xs text-gray-600">
+                                      <span className="">
+                                        ⏰ {place.time.split("-")[0]}
                                       </span>
+                                      <div className="scale-90">
+                                        <SpotCongestion
+                                          congestion={
+                                            place.crowdLevel === "high"
+                                              ? "붐빔"
+                                              : place.crowdLevel === "medium"
+                                                ? "보통"
+                                                : "여유"
+                                          }
+                                        />
+                                      </div>
                                     </div>
                                   </div>
 
@@ -758,26 +765,22 @@ const CourseDetail = () => {
                 {/* 현재 선택된 관광지 정보 */}
                 {selectedPlaceForAlternatives && (
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                    <div className="flex items-center space-x-2 mb-2">
+                    <div className="h-5 flex items-center space-x-2 mb-2">
                       <span className="text-sm font-medium text-blue-900">
                         현재 선택: {selectedPlaceForAlternatives.name}
                       </span>
-                      <span
-                        className={`px-2 py-1 rounded text-xs font-medium ${
-                          selectedPlaceForAlternatives.crowdLevel === "high"
-                            ? "bg-red-100"
-                            : selectedPlaceForAlternatives.crowdLevel ===
-                                "medium"
-                              ? "bg-yellow-100"
-                              : "bg-green-100"
-                        }`}
-                      >
-                        {selectedPlaceForAlternatives.crowdLevel === "high"
-                          ? "혼잡"
-                          : selectedPlaceForAlternatives.crowdLevel === "medium"
-                            ? "보통"
-                            : "여유"}
-                      </span>
+                      <div className="scale-90">
+                        <SpotCongestion
+                          congestion={
+                            selectedPlaceForAlternatives.crowdLevel === "high"
+                              ? "붐빔"
+                              : selectedPlaceForAlternatives.crowdLevel ===
+                                  "medium"
+                                ? "보통"
+                                : "여유"
+                          }
+                        />
+                      </div>
                     </div>
                     <p className="text-xs text-blue-700">
                       ⏰ {selectedPlaceForAlternatives.time}
